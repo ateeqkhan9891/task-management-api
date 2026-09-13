@@ -2,6 +2,9 @@ import express from "express";
 import cors from "./config/cors.js";
 import healthCheck from "./routes/health.routes.js";
 
+import helmet from "helmet";
+import apiRateLimit from "./config/rateLimit.js";
+
 import authRoutes from "./auth/auth.routes.js";
 import userRoutes from "./users/user.routes.js";
 import adminRoutes from "./admin/admin.routes.js";
@@ -15,8 +18,10 @@ import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
 
+app.use(helmet());
 app.use(cors);
-app.use(express.json());
+app.use(apiRateLimit);
+app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);

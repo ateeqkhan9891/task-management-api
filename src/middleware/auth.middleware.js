@@ -34,7 +34,9 @@ const authMiddleware = (req, res, next) => {
     // Is this token genuine and still valid?????
     let decoded;
     try {
-        decoded = jwt.verify(token, env.JWT_SECRET);
+        decoded = jwt.verify(token, env.JWT_SECRET, {
+          algorithms: ["HS256"],
+      });
     } catch (error) {
         throw new ApiError(401, "Invalid or expired token");
     }

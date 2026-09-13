@@ -64,6 +64,7 @@ export const login = async ({email,password}) => {
         env.JWT_SECRET,
         {
                 expiresIn: "7d",
+                algorithm: "HS256",
         }
     )
 
