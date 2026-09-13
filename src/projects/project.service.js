@@ -6,6 +6,14 @@ export const createProject = async ({name,description,ownerId}) => {
     const project = await prisma.project.create({
         data: {
             name,description,ownerId,
+        },
+        include: {
+            owner: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
         }
     });
 
@@ -17,6 +25,14 @@ export const getMyProjects = async (userId) => {
   const projects = await prisma.project.findMany({
     where: {
       ownerId: userId,
+    },
+    include: {
+      owner: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -31,6 +47,14 @@ export const getProjectById = async ({projectId,userId}) => {
         where: {
             id: projectId,
             ownerId: userId,
+        },
+        include: {
+            owner: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
         }
     });
 

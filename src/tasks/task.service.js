@@ -48,6 +48,20 @@ export const createTask = async ({
       projectId,
       assignedToId,
     },
+    include: {
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      assignedTo: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
 
   return task;
@@ -104,6 +118,20 @@ export const getMyTasks = async (userId, filters = {}) => {
       orderBy,
       skip,
       take: limit,
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        assignedTo: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     }),
     prisma.task.count({ where }),
   ]);
@@ -127,6 +155,20 @@ export const getTaskById = async (taskId, userId) => {
 
       project: {
         ownerId: userId,
+      },
+    },
+    include: {
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      assignedTo: {
+        select: {
+          id: true,
+          name: true,
+        },
       },
     },
   });
