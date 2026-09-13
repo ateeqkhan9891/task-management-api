@@ -55,7 +55,7 @@ export const createTask = async ({
 
 
 export const getMyTasks = async (userId, filters = {}) => {
-  const { status, priority, search, sortBy, order } = filters;
+  const { status, priority, search, sortBy, order, page, limit } = filters;
 
   const where = {
     project: {
@@ -96,12 +96,27 @@ export const getMyTasks = async (userId, filters = {}) => {
         createdAt: "desc",
       };
 
-  const tasks = await prisma.task.findMany({
-    where,
-    orderBy,
-  });
+  const skip = (page - 1) * limit;
 
-  return tasks;
+  const [tasks, total] = await Promise.all([
+    prisma.task.findMany({
+      where,
+      orderBy,
+      skip,
+      take: limit,
+    }),
+    prisma.task.count({ where }),
+  ]);
+
+  return {
+    tasks,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
 
 

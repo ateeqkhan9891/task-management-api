@@ -36,7 +36,7 @@ export const getMyTasks = async (req, res) => {
     throw new apiError(400, validation.error.issues[0].message);
   }
 
-  const tasks = await taskService.getMyTasks(
+  const result = await taskService.getMyTasks(
     req.user.userId,
     validation.data
   );
@@ -44,9 +44,8 @@ export const getMyTasks = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Tasks fetched successfully",
-    data: {
-      tasks,
-    },
+    data: result.tasks,
+    pagination: result.pagination,
   });
 };
 

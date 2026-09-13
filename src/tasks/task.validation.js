@@ -101,4 +101,15 @@ export const getTasksQuerySchema = z.object({
   order: z.enum(["asc", "desc"], {
     message: "Invalid sort order",
   }).optional(),
+
+  page: z.coerce.number()
+    .int("Page must be an integer")
+    .min(1, "Page must be at least 1")
+    .default(1),
+
+  limit: z.coerce.number()
+    .int("Limit must be an integer")
+    .min(1, "Limit must be at least 1")
+    .max(100, "Limit can't be more than 100")
+    .default(10),
 });
