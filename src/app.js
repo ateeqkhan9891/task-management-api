@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "./config/cors.js";
 import healthCheck from "./routes/health.routes.js";
 
 import authRoutes from "./auth/auth.routes.js";
@@ -14,6 +15,7 @@ import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
 
+app.use(cors);
 app.use(express.json());
 
 app.use("/api/v1/auth", authRoutes);

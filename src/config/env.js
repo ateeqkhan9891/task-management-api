@@ -10,6 +10,9 @@ const envSchema = z.object({
   DIRECT_URL: z.string().min(1),
 
   JWT_SECRET: z.string().min(32),
+
+  // Allowed client origin(s), comma separated
+  CLIENT_URL: z.string().default("http://localhost:3000"),
 });
 
 const env = envSchema.parse(process.env);
