@@ -54,17 +54,51 @@ export const createTask = async ({
 };
 
 
-export const getMyTasks = async (userId) => {
-  const tasks = await prisma.task.findMany({
-    where: {
-      project: {
-        ownerId: userId,
-      },
-    },
+export const getMyTasks = async (userId, filters = {}) => {
+  const { status, priority, search, sortBy, order } = filters;
 
-    orderBy: {
-      createdAt: "desc",
+  const where = {
+    project: {
+      ownerId: userId,
     },
+  };
+
+  if (status) {
+    where.status = status;
+  }
+
+  if (priority) {
+    where.priority = priority;
+  }
+
+  if (search) {
+    where.OR = [
+      {
+        title: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      {
+        description: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
+
+  const orderBy = sortBy
+    ? {
+        [sortBy]: order || "desc",
+      }
+    : {
+        createdAt: "desc",
+      };
+
+  const tasks = await prisma.task.findMany({
+    where,
+    orderBy,
   });
 
   return tasks;

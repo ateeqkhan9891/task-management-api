@@ -65,7 +65,40 @@ export const updateTaskSchema = z.object({
 
   dueDate: z.coerce.date().optional(),
 
-  assignedToId: z.string()
+assignedToId: z.string()
     .uuid("Invalid assigned user ID")
     .optional(),
+});
+
+
+export const getTasksQuerySchema = z.object({
+  status: z.enum(
+    ["TODO", "IN_PROGRESS", "DONE"],
+    {
+      message: "Invalid task status",
+    }
+  ).optional(),
+
+  priority: z.enum(
+    ["LOW", "MEDIUM", "HIGH"],
+    {
+      message: "Invalid task priority",
+    }
+  ).optional(),
+
+  search: z.string()
+    .trim()
+    .max(200, "Search query can't be more than 200 characters")
+    .optional(),
+
+  sortBy: z.enum(
+    ["createdAt", "title", "dueDate", "status", "priority"],
+    {
+      message: "Invalid sort field",
+    }
+  ).optional(),
+
+  order: z.enum(["asc", "desc"], {
+    message: "Invalid sort order",
+  }).optional(),
 });

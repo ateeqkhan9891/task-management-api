@@ -2,6 +2,7 @@
 import {
   createTaskSchema,
   updateTaskSchema,
+  getTasksQuerySchema,
 } from "./task.validation.js";
 import * as taskService from "./task.service.js";
 import apiError from "../utils/ApiError.js";
@@ -29,7 +30,16 @@ export const createTask = async (req, res) => {
 
 
 export const getMyTasks = async (req, res) => {
-  const tasks = await taskService.getMyTasks(req.user.userId);
+  const validation = getTasksQuerySchema.safeParse(req.query);
+
+  if (!validation.success) {
+    throw new apiError(400, validation.error.issues[0].message);
+  }
+
+  const tasks = await taskService.getMyTasks(
+    req.user.userId,
+    validation.data
+  );
 
   res.status(200).json({
     success: true,
