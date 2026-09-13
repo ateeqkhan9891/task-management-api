@@ -31,8 +31,8 @@ export const createTaskSchema = z.object({
   projectId: z.string()
     .min(1, "Project ID is required"),
 
-  assignedToId: z.string()
-    .min(1, "Assigned user ID can't be empty")
+assignedToId: z.string()
+    .uuid("Invalid assigned user ID")
     .optional(),
 });
 
@@ -66,6 +66,6 @@ export const updateTaskSchema = z.object({
   dueDate: z.coerce.date().optional(),
 
   assignedToId: z.string()
-    .min(1, "Assigned user ID can't be empty")
+    .uuid("Invalid assigned user ID")
     .optional(),
 });

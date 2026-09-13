@@ -24,6 +24,19 @@ export const createTask = async ({
     throw new apiError(404, "Project not found");
   }
 
+  // If a user is assigned, make sure that user actually exists
+  if (assignedToId) {
+    const assignedUser = await prisma.user.findUnique({
+      where: {
+        id: assignedToId,
+      },
+    });
+
+    if (!assignedUser) {
+      throw new apiError(404, "Assigned user not found");
+    }
+  }
+
   // Create the task
   const task = await prisma.task.create({
     data: {
@@ -73,6 +86,19 @@ export const getTaskById = async (taskId, userId) => {
 };
 
 export const updateTask = async (taskId, userId, data) => {
+  // If assigning to a user, make sure that user actually exists
+  if (data.assignedToId) {
+    const assignedUser = await prisma.user.findUnique({
+      where: {
+        id: data.assignedToId,
+      },
+    });
+
+    if (!assignedUser) {
+      throw new apiError(404, "Assigned user not found");
+    }
+  }
+
   const result = await prisma.task.updateMany({
     where: {
       id: taskId,
