@@ -1,6 +1,6 @@
 
-import prisma from "../lib/prisma";
-import apiError from "../utils/ApiError";
+import prisma from "../lib/prisma.js";
+import apiError from "../utils/ApiError.js";
 import bycrypt from "bcryptjs";
 import env from "../config/env.js";
 

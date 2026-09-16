@@ -1,6 +1,6 @@
 
 
-import prisma from "../lib/prisma";
+import prisma from "../lib/prisma.js";
 
 export const createProject = async ({name,description,ownerId}) => {
     const project = await prisma.project.create({
@@ -42,8 +42,8 @@ export const getMyProjects = async (userId) => {
   return projects;
 };
 
-export const getProjectById = async ({projectId,userId}) => {
-    const project = await prisma.project.findFirst({
+export const getProjectById = async ({projectId,userId}, db = prisma) => {
+    const project = await db.project.findFirst({
         where: {
             id: projectId,
             ownerId: userId,

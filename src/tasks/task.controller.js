@@ -93,14 +93,14 @@ export const updateTask = async (req, res) => {
   });
 };
 
-export const deleteTask = async (req, res) => {
-  const result = await taskService.deleteTask(
+export const deleteTask = async (req, res, service = taskService) => {
+  const result = await service.deleteTask(
     req.params.id,
     req.user.userId
   );
 
   if (result.count === 0) {
-    throw new ApiError(404, "Task not found");
+    throw new apiError(404, "Task not found");
   }
 
   res.status(200).json({

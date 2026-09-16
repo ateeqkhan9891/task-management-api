@@ -1,5 +1,5 @@
 
-import { createProjectSchema,updateProjectSchema } from "./project.validation";
+import { createProjectSchema, updateProjectSchema } from "./project.validation.js";
 import * as projectService from "./project.service.js";
 import apiError from "../utils/ApiError.js";
 import { success } from "zod";
@@ -40,13 +40,13 @@ export const getMyProjects = async (req, res) => {
 };
 
 
-export const getProjectById = async (req,res) => {
-    const project = await projectService.getProjectById(
-        req.params.id,
-        req.user.userId,
-    );
+export const getProjectById = async (req, res, service = projectService) => {
+    const project = await service.getProjectById({
+        projectId: req.params.id,
+        userId: req.user.userId,
+    });
 
-    if(!project){
+    if (!project) {
         throw new apiError(404, "Project not found");
     };
 
