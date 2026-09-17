@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.git
+.gitignore
+tests
+/src/generated/prisma
+*.log
+npm-debug.log*

@@ -75,6 +75,29 @@ npm run dev
 
 Server starts at `http://localhost:3000`.
 
+### Docker deployment
+
+Build the production image:
+
+```bash
+docker build -t express-learning .
+```
+
+Run pending migrations:
+
+```bash
+docker build --target migrations -t express-learning-migrations .
+docker run --rm --env-file .env express-learning-migrations
+```
+
+Run the API:
+
+```bash
+docker run --rm -p 3000:3000 --env-file .env express-learning
+```
+
+The container requires `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, and `CLIENT_URL` in the environment.
+
 ## API endpoints
 
 ### Auth
@@ -159,6 +182,7 @@ To test admin endpoints successfully, create an ADMIN user directly in the datab
 | `npm run dev` | Start dev server with hot reload (tsx watch) |
 | `npm run build` | Build with TypeScript |
 | `npm start` | Start production server |
+| `npm run migrate:deploy` | Apply pending Prisma migrations |
 
 ## Roadmap
 
@@ -179,4 +203,5 @@ To test admin endpoints successfully, create an ADMIN user directly in the datab
 - [ ] Production error handling (Prisma, validation, duplicates, invalid IDs)
 - [ ] OpenAPI / Swagger docs
 - [ ] Automated testing (unit + integration)
-- [ ] Production/deployment (Docker, migrations, logging)
+- [x] Docker deployment + migration target
+- [ ] Production logging
